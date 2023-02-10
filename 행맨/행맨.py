@@ -1,8 +1,14 @@
 # Hangman(행맨) 미니 게임 제작
 # 기본 프로그램 제작 및 테스트
-
+# 완성 및 최종 테스트
 
 import time
+# csv 처리
+import csv
+# 랜덤
+import random
+# 사운드 처리
+import winsound
 
 # 처음 인사
 name = input("What is your name?")
@@ -17,8 +23,24 @@ print("Start Loading...")
 print()
 time.sleep(0.5)
 
+# CSV 단어 리스트
+words = []
+
+# 문제 CSV 파일 로드
+with open('./resource/word_list.csv', 'r') as f:
+    reader =csv.reader(f)
+    # Headerskip
+    next(reader)
+    for c in reader:
+        words.append(c)
+
+# 리스트 섞기
+random.shuffle(words)
+
+q = random.choice(words)
+
 # 정답 단어
-word = "secret"
+word = q[0].strip()
 
 # 추측 단어
 guesses = ''
@@ -46,6 +68,8 @@ while turns > 0:
     if failed == 0:
         print()
         print()
+        # 성공 사운드
+        winsound.PlaySound('./sound/good.wav', winsound.SND_FILENAME)
         print('Congratulations! The Guesses is correct.')
         # while 구문 중단
         break
@@ -53,6 +77,7 @@ while turns > 0:
 
     # 추측 단어 문자 단위 입력
     print()
+    print('Hint : {}'.format(q[1].strip()))
     guess = input("guess a character.")
 
     # 단어 더하기
@@ -68,4 +93,7 @@ while turns > 0:
         print("You have", turns, 'more guesses!')
 
         if turns == 0:
+            # 실패 사운드
+            winsound.PlaySound('./sound/bad.wav', winsound.SND_FILENAME)
+
             print("You hangman game failed. Bye!")
