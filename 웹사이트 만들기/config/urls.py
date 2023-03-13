@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from Oh import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('Oh/', include('Oh.urls')),
+    path('common/', include('common.urls')),
+    path('', views.index, name='index'), # '/' 에 해당하는 path
 ]
